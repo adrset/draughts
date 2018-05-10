@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/adriansetniewski/Documents/pottsok/src/Potts/Potts.cpp
+Potts.h
+/home/adriansetniewski/Documents/pottsok/src/Potts/Potts.h
+
+/home/adriansetniewski/Documents/pottsok/src/Potts/Potts.h
+cstdlib
+-
+stdio.h
+-
+math.h
+-
+iostream
+-
+vector
+-
+

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libPotts.a  CMakeFiles/Potts.dir/Potts.cpp.o
+/usr/bin/ranlib libPotts.a

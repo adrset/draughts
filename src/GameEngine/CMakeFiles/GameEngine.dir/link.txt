@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGameEngine.a  CMakeFiles/GameEngine.dir/Shader.cpp.o CMakeFiles/GameEngine.dir/errors.cpp.o CMakeFiles/GameEngine.dir/Graph.cpp.o CMakeFiles/GameEngine.dir/Renderable.cpp.o CMakeFiles/GameEngine.dir/Quad.cpp.o CMakeFiles/GameEngine.dir/QuadField.cpp.o CMakeFiles/GameEngine.dir/Texture.cpp.o CMakeFiles/GameEngine.dir/Timer.cpp.o CMakeFiles/GameEngine.dir/Window.cpp.o CMakeFiles/GameEngine.dir/InputManager.cpp.o CMakeFiles/GameEngine.dir/Button.cpp.o
+/usr/bin/ranlib libGameEngine.a
