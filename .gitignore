@@ -33,5 +33,6 @@
 *.exe
 *.out
 *.app
-
-build/gameBinary
+CMakeCache.txt
+build/Warcaby
+Makefile
