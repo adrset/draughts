@@ -1,12 +1,25 @@
-# Potts model simulation using Metropolis algorithm.
+# Simple draughts.
 
-# The following libraries are required:
-	run:
-		libglm-dev
-		libglfw3-dev
+# Our project uses cmake 3.0+ for generating makefiles.
 
-We also use GLAD Loader-Generator and NanoVG for interface.
+# Used libraries (as git submodules):
+glfw
+glm
 
+We also use GLAD Loader-Generator.
+
+# Downloading
+Clone our repository using command:
+	 git clone --recurse-submodules https://github.com/adrset/warcaby
+
+# Compilation
+Firstly configure the project using:
+	cmake .
+
+If the proccess didn't encouter any errors build the project:
+	make
+
+The binary is located in build directory.
+	
 # Graphics drivers
-In order to run this program you need graphics drivers that support GLSL 1.3+ (130 and higher)
-Also OpenGL Context is set to 3.3.
+In order to run this program you need graphics drivers that support GLSL 1.3+ (130 and higher) and OpenGL context 3.3.
