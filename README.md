@@ -1,6 +1,6 @@
 # Simple draughts.
 
-# Our project uses cmake 3.0+ for generating makefiles.
+Our project uses cmake 3.0+ for generating makefiles. Project is designed for modern versions of gcc(so if u see `stderr was not defined [...]` your gcc is outdated )!
 
 # Libraries
 We use glfw3 and glm as git submodules
