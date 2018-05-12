@@ -46,6 +46,11 @@ namespace GameEngine{
     this->m_position = position;
   }
 
+  void Quad::move(glm::vec2 dr){
+	this->m_position += dr;
+
+  }
+
   void Quad::setScale(float scale){
     this->m_scale = scale;
   }

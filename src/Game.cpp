@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdlib>
 #include <fstream>
+#include <thread>
 
 #include <iostream>
 #include <unistd.h>
@@ -12,7 +13,7 @@
 Game::Game(int width, int height, std::string title, int fps): m_width{width}, m_height(height), m_title(title)
 {
 
-
+	m_server = new Network::ListenerServer();
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
 	
 	m_timer = new GameEngine::Timer(fps);
@@ -53,6 +54,7 @@ void Game::start(){
 
 void Game::loop() {
    	
+	
 	while (!m_window->shouldClose())
 	{
 		processInput();
@@ -65,11 +67,33 @@ void Game::loop() {
 		m_window->swapBuffers();
 
 		glfwPollEvents();
+		Network::data d = m_server->listen();
+		if(d.response != nullptr){
+			
+			if(strncmp(d.response, "MOVE ", 5) == 0){
+				
+				if(strncmp(d.response+5, "UP ", 2) == 0){
+					// NO view matrix so move in reverse :(
+					printf( "response: %s \n", d.response );
+					m_quad->move(glm::vec2(0,-10));
+				}else if(strncmp(d.response+5, "DOWN ", 4) == 0){
+					printf( "response: %s \n", d.response );
+					m_quad->move(glm::vec2(0,+10));
+				}else if(strncmp(d.response+5, "LEFT ", 4) == 0){
+					printf( "response: %s \n", d.response );
+					m_quad->move(glm::vec2(-10,0));
+				}else if(strncmp(d.response+5, "RIGHT ", 5) == 0){
+					printf( "response: %s \n", d.response );
+					m_quad->move(glm::vec2(10,0));
+				}
 
+			}
+
+		}
 		waitAndShoutFPS();
 
 	}
-
+	m_server->close();
 	cleanUp();
 
 }
@@ -77,7 +101,7 @@ void Game::loop() {
 void Game::waitAndShoutFPS(){
 		
 m_fps = 1.0/m_timer->end();
-std::cout<< m_fps << std::endl;
+//std::cout<< m_fps << std::endl;
 		m_timer->wait();
 
 }

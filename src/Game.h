@@ -9,6 +9,7 @@
 #include <GameEngine/Quad.h>
 #include <GameEngine/Button.h>
 #include <GameEngine/Graph.h>
+#include <Network/ListenerServer.h>
 
 class Game
 {
@@ -21,6 +22,7 @@ public:
 	void waitAndShoutFPS();
 
 private:
+	Network::ListenerServer* m_server;
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::Quad* m_quad;

@@ -20,6 +20,7 @@ namespace GameEngine{
     void setScale(float scale);
     void setColor(glm::vec3);
     void draw(Shader* shader);
+    void move(glm::vec2 dr);
     unsigned int getEBO() const { return EBO; }
     unsigned int getVBO() const { return VBO; } // only positions stored
     unsigned int getVAO() const { return VAO; }
