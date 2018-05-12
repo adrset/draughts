@@ -2,22 +2,20 @@
 
 # Our project uses cmake 3.0+ for generating makefiles.
 
-# Used libraries (as git submodules):
-glfw
-glm
-
-We also use GLAD Loader-Generator.
+# Libraries
+We use glfw3 and glm as git submodules
+We also use GLAD Loader-Generator generated specifically for our project.
 
 # Downloading
 Clone our repository using command:
-	 git clone --recurse-submodules https://github.com/adrset/warcaby
+	 `git clone --recurse-submodules https://github.com/adrset/warcaby`
 
 # Compilation
 Firstly configure the project using:
-	cmake .
+	`cmake .`
 
 If the proccess didn't encouter any errors build the project:
-	make
+	`make`
 
 The binary is located in build directory.
 	
