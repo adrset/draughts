@@ -8,29 +8,7 @@ namespace GameEngine {
 
 	bool Window::initialized = false;
 	GLFWwindow* Window::currWindow = nullptr;
-	void Window::init(){
-		if(!initialized){
-			if (!glfwInit())
-			{
-				glfwTerminate();
-				fatalError("Could not init GLFW");
-			}
-
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-	#ifdef __APPLE__
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	#endif
-
-			glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-			glfwSetErrorCallback(glfwError);
-
-			initialized = true;
-
-		}
-	}
+	
 	void Window::clear(){
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -70,6 +48,7 @@ namespace GameEngine {
 	void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		(action != GLFW_RELEASE) ? InputManager::pressKey(key) : InputManager::releaseKey(key);
+	printf("aaas");
 	}
 
 
@@ -93,14 +72,17 @@ namespace GameEngine {
 		return (float)fbWidth / (float)fbHeight;
 	}
 
-	Window::Window(int width, int height, std::string title, GLFWwindow* window):infos(width, height, title, 0, 0){
-		if(!initialized)
-			fatalError("Window:: Window was not initialized!");
-		if(window != nullptr){
-			std::cout<< "Sharing context with: ["<< window << "]"<<std::endl;
+	Window::Window(int width, int height, std::string title):infos(width, height, title, 0, 0){
+		if (!glfwInit())
+		{
+				glfwTerminate();
+				fatalError("Could not init GLFW");
 		}
+  		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+   		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr	, window);
+		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr	, nullptr);
 
 		if (!m_window)
 		{
@@ -112,7 +94,7 @@ namespace GameEngine {
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-    	fatalError("Window:: Failed to initialize GLAD");
+    			fatalError("Window:: Failed to initialize GLAD");
 		}
 
 
@@ -120,7 +102,7 @@ namespace GameEngine {
 		const GLFWvidmode* vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(m_window, (int)(0.5 * (vidmode->width - width)), int((0.5*(vidmode->height - height))));
 
-    	infos.vWidth = vidmode->width;
+    		infos.vWidth = vidmode->width;
 		infos.vHeight = vidmode->height;
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -129,9 +111,7 @@ namespace GameEngine {
 		glfwSetScrollCallback(m_window, scroll_callback);
 		glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 		glfwSetCursorEnterCallback(m_window, cursor_enter_callback);
-		if(window != nullptr){
-				glfwMakeContextCurrent(window);
-		}
+		
 	}
 
 	void Window::changePosition(int x, int y){

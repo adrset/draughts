@@ -4,7 +4,6 @@ project(WARCABY)
 
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/src/include")
-include_directories ("${PROJECT_SOURCE_DIR}/src/lib/glm")
 include_directories ("${PROJECT_SOURCE_DIR}/src/lib/glfw")
 include_directories ("${PROJECT_SOURCE_DIR}/src/lib/glfw/include")
 

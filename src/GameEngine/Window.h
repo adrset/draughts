@@ -50,7 +50,7 @@ namespace GameEngine {
 		info getInfo() const { return infos; }
 		GLFWwindow* getWindowID() const { return m_window; }
 		void closeWindow();
-		Window(int width, int height, std::string title, GLFWwindow* window = nullptr);
+		Window(int width, int height, std::string title);
 		~Window();
 	};
 

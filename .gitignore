@@ -36,3 +36,5 @@
 CMakeCache.txt
 build/Warcaby
 Makefile
+CMakeFiles
+CMakeCache.txt
