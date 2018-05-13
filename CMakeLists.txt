@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 project(WARCABY)
+
+set (CMAKE_CXX_STANDARD 11)
 
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/src/include")
 include_directories ("${PROJECT_SOURCE_DIR}/src/lib/glfw/include")
+include_directories ("${PROJECT_SOURCE_DIR}/src/lib/glm")
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${PROJECT_SOURCE_DIR}/build )
 

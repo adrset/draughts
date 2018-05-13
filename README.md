@@ -6,6 +6,9 @@ Our project uses cmake 3.0+ for generating makefiles. Project is designed for mo
 We use glfw3 and glm as git submodules
 We also use GLAD Loader-Generator generated specifically for our project.
 
+Required binaries:
+xorg-dev
+
 # Downloading
 Clone our repository using command:
 	 `git clone --recurse-submodules https://github.com/adrset/warcaby`

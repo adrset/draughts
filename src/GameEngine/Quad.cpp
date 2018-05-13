@@ -57,7 +57,7 @@ namespace GameEngine{
 
   void Quad::draw(Shader* shader){
     shader->use();
-    m_model = glm::mat4();
+    m_model = glm::mat4(1.0); // glm why? :(
     m_model = glm::translate(m_model, glm::vec3(m_position.x, m_position.y, 0));
 
     m_model = glm::scale(m_model, glm::vec3(m_scale));
