@@ -6,9 +6,10 @@ ListenerServer::ListenerServer(){
         .sin_family = AF_INET,
         .sin_port = htons( SERWER_PORT )
     };
-
+    serwer.sin_addr.s_addr = INADDR_ANY;
     FD_ZERO(&master);
     FD_ZERO(&read_fds);
+	
     if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 )
     {
         perror( "inet_pton() ERROR" );

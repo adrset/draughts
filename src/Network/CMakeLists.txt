@@ -1,5 +1,5 @@
 
 
-add_library(Network ListenerServer.cpp)
+add_library(Network ListenerServer.cpp Client.cpp)
 
 

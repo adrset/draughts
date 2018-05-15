@@ -13,7 +13,8 @@
 Game::Game(int width, int height, std::string title, int fps): m_width{width}, m_height(height), m_title(title)
 {
 
-	m_server = new Network::ListenerServer();
+	//m_server = new Network::ListenerServer();
+	m_client = new Network::Client();
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
 	
 	m_timer = new GameEngine::Timer(fps);
@@ -63,11 +64,12 @@ void Game::loop() {
  		m_window->clear();
     
        		m_quad->draw(m_shader);
+		m_client->send("hello");
       
 		m_window->swapBuffers();
 
 		glfwPollEvents();
-		Network::data d = m_server->listen();
+		/*Network::data d = m_server->listen();
 		if(d.response != nullptr){
 			
 			if(strncmp(d.response, "MOVE ", 5) == 0){
@@ -89,11 +91,12 @@ void Game::loop() {
 
 			}
 
-		}
+		}*/
 		waitAndShoutFPS();
 
 	}
-	m_server->close();
+	//m_server->close();
+	m_client->close();
 	cleanUp();
 
 }

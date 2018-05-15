@@ -9,8 +9,8 @@
 #include <GameEngine/Quad.h>
 #include <GameEngine/Button.h>
 #include <GameEngine/Graph.h>
-#include <Network/ListenerServer.h>
-
+//#include <Network/ListenerServer.h>
+#include <Network/Client.h>
 class Game
 {
 public:
@@ -22,7 +22,8 @@ public:
 	void waitAndShoutFPS();
 
 private:
-	Network::ListenerServer* m_server;
+	//Network::ListenerServer* m_server;
+	Network::Client* m_client;
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::Quad* m_quad;

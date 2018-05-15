@@ -1,61 +1,80 @@
-#include <stdio.h>
-#include <stdlib.h> // exit()
-#include <string.h> // memset()
-#include <arpa/inet.h> // inet_pton()
-#include <sys/socket.h>
+#include "Client.h"
+namespace Network{
 
-#define SERWER_PORT 8888
-#define SERWER_IP "127.0.0.1"
+Client::Client(){
 
-
-int main(int argc, char** argv)
-{
     char message[20] = "";
+    FD_ZERO(&master);
+    FD_ZERO(&read_fds);
 
-    if(argc > 1)
-	strcpy(message, argv[1]);
-    else 
-	strcpy(message, "Empty message :(");
-    struct sockaddr_in serwer =
+    m_server =
     {
         .sin_family = AF_INET,
         .sin_port = htons( SERWER_PORT )
     };
-    if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 )
+
+    if( inet_pton( AF_INET, SERWER_IP, & m_server.sin_addr ) <= 0 )
     {
         perror( "inet_pton() ERROR" );
         exit( 1 );
     }
    
-    const int socket_ = socket( AF_INET, SOCK_DGRAM, 0 );
-    if( socket_ < 0 )
+    m_socket = socket( AF_INET, SOCK_DGRAM, 0 );
+    if( m_socket < 0 )
     {
         perror( "socket() ERROR" );
         exit( 1 );
     }
+
+
+}
+
+data Client::send(char* message)
+{
    
-    char buffer[ 4096 ];
+    struct timeval read_timeout;
+    read_timeout.tv_sec = 0;
+    read_timeout.tv_usec = 10;
+
     strcpy(buffer, message);
     printf( "|Message for server|: %s \n", buffer );
+    FD_SET(m_socket, &read_fds);
+    socklen_t len = sizeof( m_server );
    
-    socklen_t len = sizeof( serwer );
-   
-    if( sendto( socket_, buffer, strlen( buffer ), 0,( struct sockaddr * ) & serwer, len ) < 0 )
+    if( sendto( m_socket, buffer, strlen( buffer ), 0,( struct sockaddr * ) & m_server, len ) < 0 )
     {
         perror( "sendto() ERROR" );
         exit( 1 );
     }
    
     struct sockaddr_in from = { };
+
+    m_activity = select( m_socket + 1, &read_fds , NULL , NULL , &read_timeout);
+
+	if ((m_activity < 0)) 
+        {
+            printf("select error");
+        }
+    if (FD_ISSET(m_socket, &read_fds)) {
+	    memset( buffer, 0, sizeof( buffer ) );
+	    if( recvfrom( m_socket, buffer, sizeof( buffer ), 0,( struct sockaddr * ) & from, & len ) < 0 )
+	    {
+		perror( "recvfrom() ERROR" );
+		exit( 1 );
+	    }
+	    printf( "|Server's reply|: %s \n", buffer );
+	    strcpy(m_message, buffer);
+	    return data(false, m_message, strlen(m_message));	
+     }
+     return data();
    
-    memset( buffer, 0, sizeof( buffer ) );
-    if( recvfrom( socket_, buffer, sizeof( buffer ), 0,( struct sockaddr * ) & from, & len ) < 0 )
-    {
-        perror( "recvfrom() ERROR" );
-        exit( 1 );
-    }
-    printf( "|Server's reply|: %s \n", buffer );
-   
-    shutdown( socket_, SHUT_RDWR );
+}
+
+void Client::close(){
+
+ shutdown( m_socket, SHUT_RDWR );
+
+}
+
 }
 
