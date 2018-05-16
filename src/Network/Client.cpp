@@ -65,7 +65,7 @@ data Client::send(char* message)
 		perror( "recvfrom() ERROR" );
 		exit( 1 );
 	    }
-	    printf( "|Server's reply|: %s \n", buffer );
+	    //printf( "|Server's reply|: %s \n", buffer );
 	    strcpy(m_message, buffer);
 	    return data(false, m_message, strlen(m_message));	
      }

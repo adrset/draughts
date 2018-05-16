@@ -22,21 +22,29 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 
-	m_shader = new GameEngine::Shader("instance.vs", "instance.fs");
+	m_instanceShader = new GameEngine::Shader("instance.vs", "instance.fs");
+	m_shader = new GameEngine::Shader("2dshader.vs", "2dshader.fs");
+	m_projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.0f);
 
 	m_shader->use();
+	m_shader->setMat4("orthoMatrix", m_projection);
+
+	m_instanceShader->use();
+	m_instanceShader->setMat4("orthoMatrix", m_projection);
 
 	// Simple quad
 	float vertices[] = {
-        	1.0f,  1.0f, 0.0f,  // top right
-        	1.0f, -1.0f, 0.0f,  // bottom right
-        	-1.0f, -1.0f, 0.0f,  // bottom left
-        	-1.0f,  1.0f, 0.0f   // top left 
-    		};
-    	unsigned int indices[] = {  // note that we start from 0!
-       		0, 1, 3,  // first Triangle
-        	1, 2, 3   // second Triangle
-    	};
+       1.0f,  1.0f, 0.0f,  // top right
+       1.0f, -1.0f, 0.0f,  // bottom right
+      -1.0f, -1.0f, 0.0f,  // bottom left
+      -1.0,  1.0f, 0.0f   // top left
+  };
+  unsigned int indices[] = {  // note that we start from 0!
+      0, 1, 3,  // first Triangle
+      1, 2, 3   // second Triangle
+  };
+
+
 	float offset = (float)m_width/8.0f;
 	std::vector<glm::vec3> col;
 	std::vector<glm::vec3> pos;
@@ -49,11 +57,9 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 	}
 
 	m_board = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
+	m_quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(), glm::vec3(0.3, 0.7, 0.1), offset);
 	
 	
-	m_projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.0f);
-
-	m_shader->setMat4("orthoMatrix", m_projection);
    
 	
 
@@ -70,16 +76,23 @@ void Game::loop() {
 	
 	while (!m_window->shouldClose())
 	{	
-		m_shader->use();
-		m_shader->setMat4("orthoMatrix", m_projection);
 		processInput();
 		m_timer->start();
 	
  		m_window->clear();
     		
- 		m_board->update(m_shader); // draws quads
+ 		m_board->update(m_instanceShader); // draws quads
+		m_quad->draw(m_shader);
 		
-		m_client->send("?");
+		Network::data recv = m_client->send("?");
+		if(!recv.empty){
+			std::cout<<"\rResponse:"<<recv.response<<"          "<<std::flush;
+			if(strncmp("MOVE UP", recv.response,7) == 0){
+				m_quad->move(glm::vec2(0,1));
+			}
+		}else{
+			std::cout<<"\r"<<"No connection!       "<<std::flush;
+		}
       
 		m_window->swapBuffers();
 
