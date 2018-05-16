@@ -62,6 +62,11 @@ namespace GameEngine {
 		glUseProgram(ID);
 	}
 
+	void Shader::unuse()
+	{
+		glUseProgram(0);
+	}
+
 	void Shader::setVec3(const std::string &name, const glm::vec3 &value) const
 	{
 		glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(value));

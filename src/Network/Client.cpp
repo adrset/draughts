@@ -37,15 +37,18 @@ data Client::send(char* message)
     read_timeout.tv_usec = 10;
 
     strcpy(buffer, message);
-    printf( "|Message for server|: %s \n", buffer );
+    //printf( "|Message for server|: %s \n", buffer );
     FD_SET(m_socket, &read_fds);
     socklen_t len = sizeof( m_server );
-   
-    if( sendto( m_socket, buffer, strlen( buffer ), 0,( struct sockaddr * ) & m_server, len ) < 0 )
+    int c = 0;
+    if( c = sendto( m_socket, buffer, strlen( buffer ), 0,( struct sockaddr * ) & m_server, len ) < 0 )
     {
         perror( "sendto() ERROR" );
         exit( 1 );
     }
+
+	if(c>0)
+	 perror("DIDNT SEND ALL!");
    
     struct sockaddr_in from = { };
 

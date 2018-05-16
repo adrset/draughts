@@ -6,7 +6,7 @@
 #include <GameEngine/Window.h>
 #include <GameEngine/Shader.h>
 #include <GameEngine/Timer.h>
-#include <GameEngine/Quad.h>
+#include <GameEngine/QuadField.h>
 #include <GameEngine/Button.h>
 #include <GameEngine/Graph.h>
 //#include <Network/ListenerServer.h>
@@ -27,6 +27,7 @@ private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::Quad* m_quad;
+	GameEngine::QuadField* m_board;
 	int m_fps = 60;
 	
 	void processInput();
@@ -42,3 +43,4 @@ private:
 	float lastY;
 	void loop();
 };
+

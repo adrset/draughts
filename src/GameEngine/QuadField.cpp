@@ -87,7 +87,7 @@ namespace GameEngine {
 
 		void QuadField::updateTransformations(){
 			for(unsigned int i=0; i<m_positions.size();i++){
-			  m_model = glm::mat4();
+				m_model = glm::mat4(1.0);
 				m_model = glm::translate(m_model, m_positions[i]);
 				m_model = glm::scale(m_model, glm::vec3(m_scale));
 				m_buffer[index++]=(m_model[0][0]);

@@ -63,8 +63,7 @@ namespace GameEngine{
     m_model = glm::scale(m_model, glm::vec3(m_scale));
 
     shader->setMat4("model", m_model);
-    shader->setVec3("aaa", glm::vec3(0.5));
-    shader->setVec3("color", glm::vec3(0.7));
+    shader->setVec3("color", m_color);
     //shader.setMat4("view", view);
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
