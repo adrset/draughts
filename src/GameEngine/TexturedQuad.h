@@ -1,0 +1,21 @@
+#ifndef TEXTURED_QUAD_H
+#define TEXTURED_QUAD_H
+#include "Quad.h"
+#include "Texture.h"
+
+namespace GameEngine{
+
+class TexturedQuad: public Quad {
+public:
+
+	TexturedQuad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale, std::string texturePath);
+
+private:
+	Texture* m_texture;
+
+};
+
+
+}
+
+#endif

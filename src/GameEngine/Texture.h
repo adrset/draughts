@@ -8,8 +8,7 @@ namespace GameEngine {
 	class Texture
 	{
 	public:
-		Texture(std::string textureName);
-		Texture(std::string path, std::string typeName);
+		Texture(std::string path, std::string typeName = "");
 		~Texture();
 
 		unsigned int getID() const { return m_texture; }
@@ -17,6 +16,8 @@ namespace GameEngine {
 		unsigned int getHeight() const { return m_height; }
 		std::string getType() const { return m_type; }
 		std::string getPath() const { return m_path; }
+		void bind();
+		void unbind();
 	private:
 		std::string m_type;
 		std::string m_path;

@@ -8,17 +8,17 @@ namespace GameEngine {
 		m_colors(colors){
 
 			// FLOATS_PER_INSTANCE = 20
-			m_buffer = new float[m_positions.size() * FLOATS_PER_INSTANCE];
+		    m_buffer = new float[m_positions.size() * FLOATS_PER_INSTANCE];
 
 
 			// Generate a VBO
-			glGenBuffers(1, &m_instanceVBO);
+		    glGenBuffers(1, &m_instanceVBO);
 
 			// Always bind buffer in order to modify it
-			glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
-
+		    glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+  
 			// Send information about data size (amount * FLOATS_PER_INSTANCE * 4 ) in bytes, and tell that we will provide data in future (nullptr)
-			glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STREAM_DRAW);
+		    glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STREAM_DRAW);
 
   			// Bind VAO in order to add some attributes into it
 		    glBindVertexArray(VAO);
@@ -26,26 +26,26 @@ namespace GameEngine {
 
 		    //We know that we can only store 4 floats in one attribute, so we send our matrix as 4 vec4 columns
 		    GLsizei vec4Size = sizeof(glm::vec4);
-		    glEnableVertexAttribArray(1);
+		    glEnableVertexAttribArray(2);
 		    // attribute nr, lenght, type, normalize? , stride, pointer to the data
 		    // Our structure (f is float) Buffer = { block_1 ([f,f,f,f], [f,f,f,f], [f,f,f,f], [f,f,f,f], [f,f,f,1.0f]) ... block_n(...)}
-		    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)0);
+		    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)0);
 		    glEnableVertexAttribArray(2);
-		    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)vec4Size));
+		    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)vec4Size));
 		    glEnableVertexAttribArray(3);
-		    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(2 * vec4Size)));
+		    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(2 * vec4Size)));
 		    glEnableVertexAttribArray(4);
-		    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(3 * vec4Size)));
+		    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(3 * vec4Size)));
 		    glEnableVertexAttribArray(5);
-		    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(4 * vec4Size)));
+		    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(4 * vec4Size)));
 
 		    // 2nd argument 1 - move to another block after 1 instance
 
-		    glVertexAttribDivisor(1, 1);
 		    glVertexAttribDivisor(2, 1);
 		    glVertexAttribDivisor(3, 1);
 		    glVertexAttribDivisor(4, 1);
-				glVertexAttribDivisor(5, 1);
+		    glVertexAttribDivisor(5, 1);
+		    glVertexAttribDivisor(6, 1);
 
 			// Just for safety unbind vao after editionsX
 		    glBindVertexArray(0);
@@ -124,13 +124,13 @@ namespace GameEngine {
 		void QuadField::prepare() {
 
 			glBindVertexArray(VAO);
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 7; i++)
 				glEnableVertexAttribArray(i);
 
 		}
 
 		void QuadField::stop(){
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 7; i++)
 				glDisableVertexAttribArray(i);
 
 			glBindVertexArray(0);

@@ -34,15 +34,22 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 
 	// Simple quad
 	float vertices[] = {
-       1.0f,  1.0f, 0.0f,  // top right
-       1.0f, -1.0f, 0.0f,  // bottom right
-      -1.0f, -1.0f, 0.0f,  // bottom left
-      -1.0,  1.0f, 0.0f   // top left
+       1.0f,  1.0f, 0.0f,  1.0f,  1.0f, // top right
+       1.0f, -1.0f, 0.0f,  1.0f,  0.0f,// bottom right
+      -1.0f, -1.0f, 0.0f,  0.0f,  0.0f,// bottom left
+      -1.0f,  1.0f, 0.0f,  0.1f,  1.0f // top left
   };
   unsigned int indices[] = {  // note that we start from 0!
       0, 1, 3,  // first Triangle
       1, 2, 3   // second Triangle
   };
+
+float texCoords[] = {
+     // lower-left corner  
+    1.0f, 0.0f,  // lower-right corner
+    1.0f, 1.0f,
+    0.0f, 1.0f
+};
 
 
 	float offset = (float)m_width/8.0f;
