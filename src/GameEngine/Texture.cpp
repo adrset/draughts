@@ -8,7 +8,7 @@ namespace GameEngine {
 		glGenTextures(1, &m_texture);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 
-		stbi_set_flip_vertically_on_load(true);
+		//stbi_set_flip_vertically_on_load(true);
 
 		unsigned char *data = stbi_load(path.c_str(), &m_width, &m_height, &m_nrChannels, 0);
 		// target / mipmap lvl / colours / known/ known /always 0 / rgb as previously / char = usigned byte / data
@@ -30,8 +30,8 @@ namespace GameEngine {
 			glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -46,10 +46,16 @@ namespace GameEngine {
 	void Texture::bind(){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glEnable(GL_BLEND); 
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 	}
 
 
-	void Texture::unbind(){}
+	void Texture::unbind(){
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_BLEND); 
+	}
 
  
 

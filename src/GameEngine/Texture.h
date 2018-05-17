@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <string>
 #include "errors.h"
-#include <nanovg/stb_image.h>
+#include <stb_image.h>
 namespace GameEngine {
 
 	class Texture

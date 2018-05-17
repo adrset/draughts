@@ -7,6 +7,7 @@
 #include <GameEngine/Shader.h>
 #include <GameEngine/Timer.h>
 #include <GameEngine/QuadField.h>
+#include <GameEngine/TexturedQuad.h>
 #include <GameEngine/Button.h>
 #include <GameEngine/Graph.h>
 //#include <Network/ListenerServer.h>
@@ -28,6 +29,7 @@ private:
 	GameEngine::Shader* m_instanceShader;
 	GameEngine::Shader* m_shader;
 	GameEngine::Quad* m_quad;
+	GameEngine::TexturedQuad* m_texturedQuad;
 	GameEngine::QuadField* m_board;
 	int m_fps = 60;
 	

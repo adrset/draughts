@@ -37,19 +37,13 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
        1.0f,  1.0f, 0.0f,  1.0f,  1.0f, // top right
        1.0f, -1.0f, 0.0f,  1.0f,  0.0f,// bottom right
       -1.0f, -1.0f, 0.0f,  0.0f,  0.0f,// bottom left
-      -1.0f,  1.0f, 0.0f,  0.1f,  1.0f // top left
+      -1.0f,  1.0f, 0.0f,  0.0f,  1.0f // top left
   };
   unsigned int indices[] = {  // note that we start from 0!
       0, 1, 3,  // first Triangle
       1, 2, 3   // second Triangle
   };
 
-float texCoords[] = {
-     // lower-left corner  
-    1.0f, 0.0f,  // lower-right corner
-    1.0f, 1.0f,
-    0.0f, 1.0f
-};
 
 
 	float offset = (float)m_width/8.0f;
@@ -66,7 +60,7 @@ float texCoords[] = {
 	m_board = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
 	m_quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(), glm::vec3(0.3, 0.7, 0.1), offset);
 	
-	
+	m_texturedQuad = new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "red.png");
    
 	
 
@@ -90,12 +84,13 @@ void Game::loop() {
     		
  		m_board->update(m_instanceShader); // draws quads
 		m_quad->draw(m_shader);
-		
+		m_texturedQuad->draw(m_shader);
 		Network::data recv = m_client->send("?");
 		if(!recv.empty){
 			std::cout<<"\rResponse:"<<recv.response<<"          "<<std::flush;
 			if(strncmp("MOVE UP", recv.response,7) == 0){
-				m_quad->move(glm::vec2(0,1));
+				m_texturedQuad->move(glm::vec2(0,1));
+				m_quad->move(glm::vec2(1,0));
 			}
 		}else{
 			std::cout<<"\r"<<"No connection!       "<<std::flush;
@@ -158,6 +153,10 @@ if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_E))
 
 
 void Game::cleanUp() {
+	
+	delete m_board;
+	delete m_quad;
+	delete m_texturedQuad;
 	m_window->closeWindow();
 }
 
@@ -166,6 +165,8 @@ Game::~Game()
 {
 	delete m_window;
 	delete m_shader;
+	delete m_instanceShader;
 	delete m_timer;
+	
 	std::cout << "Closing game." << std::endl;
 }
