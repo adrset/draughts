@@ -5,7 +5,7 @@ namespace GameEngine {
 
 		QuadField::QuadField(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, std::vector<glm::vec3> positions,
 		 std::vector<glm::vec3> colors, float scale) : Quad (vertices, indices, vSize, iSize, scale), m_positions(positions),
-		m_colors(colors){
+		m_colors(colors), m_colorsCopy(colors){
 
 			// FLOATS_PER_INSTANCE = 20
 		    m_buffer = new float[m_positions.size() * FLOATS_PER_INSTANCE];
@@ -49,6 +49,12 @@ namespace GameEngine {
 
 			// Just for safety unbind vao after editionsX
 		    glBindVertexArray(0);
+
+		}
+
+		void QuadField::setColor(glm::vec3 color, int index){
+			m_colors[index] = color;
+
 
 		}
 

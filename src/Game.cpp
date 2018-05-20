@@ -67,6 +67,19 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 
 }
 
+std::ostream& operator<<(std::ostream& stream, glm::vec2& vec){
+
+	stream << "[" << vec.x << ", " << vec.y << "]";
+	return stream;
+}
+
+std::ostream& operator<<(std::ostream& stream, glm::vec3& vec){
+
+	stream << "[" <<vec.x << ", " << vec.y << ", " << vec.z << "]";
+	return stream;
+
+}
+
 void Game::start(){
 	loop();
 }
@@ -81,7 +94,18 @@ void Game::loop() {
 		m_timer->start();
 	
  		m_window->clear();
-    		
+		glm::vec2 pos = GameEngine::InputManager::getMouseCoords().xy;
+  
+		const std::vector <glm::vec3>& positions = m_board->getPositions();
+		const float& scale = m_board->getScale();
+		for (unsigned int i = 0; i< positions.size();i++){
+			if(pos.x > positions[i].x && pos.y > positions[i].y && pos.x < positions[i].x + scale && pos.y < positions[i].y + scale){
+				m_board->setColor(glm::vec3(0.6), i);
+			}else{
+				m_board->setOldColor(i);
+			}
+			
+		}
  		m_board->update(m_instanceShader); // draws quads
 		m_quad->draw(m_shader);
 		m_texturedQuad->draw(m_shader);
@@ -99,33 +123,10 @@ void Game::loop() {
 		m_window->swapBuffers();
 
 		glfwPollEvents();
-		/*Network::data d = m_server->listen();
-		if(d.response != nullptr){
-			
-			if(strncmp(d.response, "MOVE ", 5) == 0){
-				
-				if(strncmp(d.response+5, "UP ", 2) == 0){
-					// NO view matrix so move in reverse :(
-					printf( "response: %s \n", d.response );
-					m_quad->move(glm::vec2(0,-10));
-				}else if(strncmp(d.response+5, "DOWN ", 4) == 0){
-					printf( "response: %s \n", d.response );
-					m_quad->move(glm::vec2(0,+10));
-				}else if(strncmp(d.response+5, "LEFT ", 4) == 0){
-					printf( "response: %s \n", d.response );
-					m_quad->move(glm::vec2(-10,0));
-				}else if(strncmp(d.response+5, "RIGHT ", 5) == 0){
-					printf( "response: %s \n", d.response );
-					m_quad->move(glm::vec2(10,0));
-				}
-
-			}
-
-		}*/
+		
 		waitAndShoutFPS();
 
 	}
-	//m_server->close();
 	m_client->close();
 	cleanUp();
 
