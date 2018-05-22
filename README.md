@@ -7,15 +7,17 @@ We use glfw3 and glm as git submodules
 We also use GLAD Loader-Generator generated specifically for our project.
 
 Required binaries:
-xorg-dev
+`xorg-dev` for debian based
+`xorg-x11-server-devel` for Fedora/CentOS/RedHat
 
 # Downloading
 Clone our repository using command:
 	 `git clone --recurse-submodules https://github.com/adrset/warcaby`
 
 # Compilation
-Firstly configure the project using:
+Firstly configure the project using(issue it twice):
 	`cmake .`
+
 
 If the proccess didn't encouter any errors build the project:
 	`make`
