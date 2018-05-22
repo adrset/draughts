@@ -16,7 +16,7 @@ namespace GameEngine{
     glm::vec2 getPosition() const { return m_position; }
     float getScale() const { return m_scale; }
     glm::vec3 getColor() const { return m_color; }
-    void setPosition(glm::vec2& position);
+    void setPosition(glm::vec2 position);
     void setScale(float scale);
     void setColor(glm::vec3);
     void draw(Shader* shader);

@@ -4,8 +4,8 @@ namespace GameEngine{
 
 
 
-	TexturedQuad::TexturedQuad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale, std::string texturePath):  Quad (vertices, indices, vSize, iSize, scale), m_texture(new Texture(texturePath)){
-
+	TexturedQuad::TexturedQuad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale, std::string texturePath):  Quad (vertices, indices, vSize, iSize, position, color, scale), m_texture(new Texture(texturePath)){
+	
 }
 
  void TexturedQuad::draw(Shader* shader){
@@ -22,11 +22,11 @@ namespace GameEngine{
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    m_texture->unbind();
+    //m_texture->unbind();
     glBindVertexArray(0);
   }
   TexturedQuad::~TexturedQuad(){
-    delete m_texture;
+    
   }
 
 

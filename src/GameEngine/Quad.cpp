@@ -45,7 +45,7 @@ namespace GameEngine{
     this->m_color = color;
   }
 
-  void Quad::setPosition(glm::vec2& position){
+  void Quad::setPosition(glm::vec2 position){
     this->m_position = position;
   }
 

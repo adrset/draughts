@@ -1,7 +1,7 @@
 #ifndef TEXTURED_QUAD_H
 #define TEXTURED_QUAD_H
 #include "Quad.h"
-#include "Texture.h"
+#include "ResourceManager.h"
 
 namespace GameEngine{
 

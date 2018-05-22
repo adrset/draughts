@@ -58,7 +58,18 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 	}
 
 	m_board = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
-	m_quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(), glm::vec3(0.3, 0.7, 0.1), offset);
+	for(int i =0;i<3;i++){
+		for(int j =0;j<4;j++){
+			m_draughtsOpposite.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 1 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
+		}
+	}
+
+for(int i =5;i<8;i++){
+		for(int j =0;j<4;j++){
+			m_draughts.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
+		}
+	}
+
 	
 	m_texturedQuad = new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "red.png");
    
@@ -106,18 +117,24 @@ void Game::loop() {
 			}
 			
 		}
+		
  		m_board->update(m_instanceShader); // draws quads
-		m_quad->draw(m_shader);
-		m_texturedQuad->draw(m_shader);
-		Network::data recv = m_client->send("?");
+
+		for(int i =0;i<12;i++){
+			m_draughtsOpposite[i]->draw(m_shader);
+			m_draughts[i]->draw(m_shader);
+		}
+		//m_quad->draw(m_shader);
+		//m_texturedQuad->draw(m_shader);
+		Network::data recv = m_client->send("GET_BOARD");
 		if(!recv.empty){
-			std::cout<<"\rResponse:"<<recv.response<<"          "<<std::flush;
-			if(strncmp("MOVE UP", recv.response,7) == 0){
-				m_texturedQuad->move(glm::vec2(0,1));
-				m_quad->move(glm::vec2(1,0));
-			}
+			//std::cout<<"Response:"<<recv.response<<"          "<<std::flush;
+			//if(strncmp("MOVE UP", recv.response,7) == 0){
+			//	m_texturedQuad->move(glm::vec2(0,1));
+				
+			
 		}else{
-			std::cout<<"\r"<<"No connection!       "<<std::flush;
+			//std::cout<<"No connection!       "<<std::flush;
 		}
       
 		m_window->swapBuffers();
@@ -148,16 +165,14 @@ void Game::processInput()
 {
 	if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(m_window->getWindowID(), true);
-if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_E))
-		m_quad->move(glm::vec2(0,1));
+
 }
 
 
 void Game::cleanUp() {
 	
 	delete m_board;
-	delete m_quad;
-	delete m_texturedQuad;
+	//delete m_texturedQuad;
 	m_window->closeWindow();
 }
 

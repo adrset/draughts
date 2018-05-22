@@ -28,7 +28,8 @@ private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_instanceShader;
 	GameEngine::Shader* m_shader;
-	GameEngine::Quad* m_quad;
+	std::vector<GameEngine::TexturedQuad*> m_draughtsOpposite;
+	std::vector<GameEngine::TexturedQuad*> m_draughts;
 	GameEngine::TexturedQuad* m_texturedQuad;
 	GameEngine::QuadField* m_board;
 	int m_fps = 60;

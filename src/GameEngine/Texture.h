@@ -18,6 +18,8 @@ namespace GameEngine {
 		std::string getPath() const { return m_path; }
 		void bind();
 		void unbind();
+		bool operator<(const Texture &t);
+		
 	private:
 		std::string m_type;
 		std::string m_path;

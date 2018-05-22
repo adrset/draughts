@@ -42,6 +42,10 @@ namespace GameEngine {
 		}
 
 	}
+	bool Texture::operator<(const Texture &t){
+		return m_texture < t.getID();
+
+	}
 
 	void Texture::bind(){
 		glActiveTexture(GL_TEXTURE0);
