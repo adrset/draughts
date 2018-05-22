@@ -11,7 +11,8 @@
 
 
 Game::Game(int width, int height, std::string title, int fps): m_width{width}, m_height(height), m_title(title)
-{
+{	
+	
 
 	//m_server = new Network::ListenerServer();
 	m_client = new Network::Client();
@@ -128,7 +129,26 @@ void Game::loop() {
 		//m_texturedQuad->draw(m_shader);
 		Network::data recv = m_client->send("GET_BOARD");
 		if(!recv.empty){
-			//std::cout<<"Response:"<<recv.response<<"          "<<std::flush;
+			//std::cout<<"Response:"<<recv.response<<"          "<<std::endl;
+			//std::cout<<recv.response<<std::endl;
+			std::stringstream str;
+			str<<recv.response;
+			int x;
+			
+				int i=0;
+				while(str>>x){
+					m_boardData[i/8][i%8] = x ;
+					i++;
+				}	
+					
+			int cols = sizeof m_boardData / sizeof m_boardData[0];
+			std::cout<<"RESPONSE"<<std::endl;
+			for(int i =0;i<cols;i++){
+				for(int j =0;j<cols;j++){
+					std::cout<< m_boardData[i][j]<<"*";
+				}
+				std::cout<<std::endl;
+			}
 			//if(strncmp("MOVE UP", recv.response,7) == 0){
 			//	m_texturedQuad->move(glm::vec2(0,1));
 				

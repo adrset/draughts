@@ -23,6 +23,7 @@ public:
 	void waitAndShoutFPS();
 
 private:
+	int m_boardData[8][8];
 	//Network::ListenerServer* m_server;
 	Network::Client* m_client;
 	glm::mat4 m_projection;
