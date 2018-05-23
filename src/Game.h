@@ -23,6 +23,7 @@ public:
 	void waitAndShoutFPS();
 
 private:
+	void networkLogic();
 	int m_boardData[8][8];
 	//Network::ListenerServer* m_server;
 	Network::Client* m_client;
@@ -34,7 +35,7 @@ private:
 	GameEngine::TexturedQuad* m_texturedQuad;
 	GameEngine::QuadField* m_board;
 	int m_fps = 60;
-	
+	unsigned int m_sessionID = 0;
 	void processInput();
 	int m_width;
 	int m_height;

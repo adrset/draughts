@@ -29,12 +29,12 @@ Client::Client(){
 
 }
 
-data Client::send(char* message)
+data Client::send(char* message, unsigned int usec)
 {
    
     struct timeval read_timeout;
     read_timeout.tv_sec = 0;
-    read_timeout.tv_usec = 10;
+    read_timeout.tv_usec = usec;
 
     strcpy(buffer, message);
     //printf( "|Message for server|: %s \n", buffer );

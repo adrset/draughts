@@ -99,7 +99,7 @@ void Game::start(){
 void Game::loop() {
 
 	
-	
+	int loop=0;
 	while (!m_window->shouldClose())
 	{	
 		processInput();
@@ -107,7 +107,6 @@ void Game::loop() {
 	
  		m_window->clear();
 		glm::vec2 pos = GameEngine::InputManager::getMouseCoords().xy;
-  
 		const std::vector <glm::vec3>& positions = m_board->getPositions();
 		const float& scale = m_board->getScale();
 		for (unsigned int i = 0; i< positions.size();i++){
@@ -125,47 +124,81 @@ void Game::loop() {
 			m_draughtsOpposite[i]->draw(m_shader);
 			m_draughts[i]->draw(m_shader);
 		}
-		//m_quad->draw(m_shader);
-		//m_texturedQuad->draw(m_shader);
-		Network::data recv = m_client->send("GET_BOARD");
-		if(!recv.empty){
-			//std::cout<<"Response:"<<recv.response<<"          "<<std::endl;
-			//std::cout<<recv.response<<std::endl;
-			std::stringstream str;
-			str<<recv.response;
-			int x;
-			
-				int i=0;
-				while(str>>x){
-					m_boardData[i/8][i%8] = x ;
-					i++;
-				}	
-					
-			int cols = sizeof m_boardData / sizeof m_boardData[0];
-			std::cout<<"RESPONSE"<<std::endl;
-			for(int i =0;i<cols;i++){
-				for(int j =0;j<cols;j++){
-					std::cout<< m_boardData[i][j]<<"*";
-				}
-				std::cout<<std::endl;
-			}
-			//if(strncmp("MOVE UP", recv.response,7) == 0){
-			//	m_texturedQuad->move(glm::vec2(0,1));
-				
-			
-		}else{
-			//std::cout<<"No connection!       "<<std::flush;
+
+
+		//Networking
+		if(loop > m_fps ){
+			networkLogic();
+			loop = 0;	
 		}
-      
 		m_window->swapBuffers();
 
 		glfwPollEvents();
 		
 		waitAndShoutFPS();
-
+		loop++;
 	}
 	m_client->close();
 	cleanUp();
+
+}
+
+void Game::networkLogic(){
+
+	Network::data recv;
+	if(m_sessionID == 0 ){
+		recv = m_client->send("GET_SID", 30000);
+		if(!recv.empty){
+			std::stringstream str;
+			str<<recv.response;
+			str>>m_sessionID;
+			std::cout<<"Assigned ID"<<m_sessionID<<std::endl;
+		
+		}else{
+			std::cout<<"No connection!       "<<std::endl;
+		}
+	}else if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_R)){
+		std::string strg = "MOV ";
+		strg += std::to_string(m_sessionID);
+		strg += " 1 3 2 4";
+
+		char *cstr = new char[strg.length() + 1];
+		strcpy(cstr, strg.c_str());
+
+		recv = m_client->send(cstr);
+
+		delete [] cstr;
+		if(!recv.empty){
+			
+			std::cout<<recv.response<<std::endl;
+		}
+	}else{
+
+	recv = m_client->send("GET_BOARD");
+		if(!recv.empty){
+			
+			std::stringstream str;
+			str<<recv.response;
+			int x;
+			
+			int i=0;
+			while(str>>x){
+				m_boardData[i/8][i%8] = x ;
+				i++;
+			}	
+			
+			std::cout<<"RESPONSE"<<std::endl;
+			for(int i =0;i<8;i++){
+				for(int j =0;j<8;j++){
+					std::cout<< m_boardData[i][j]<<"*";
+				}
+				std::cout<<std::endl;
+			}
+			
+		}else{
+			std::cout<<"No connection!       "<<std::endl;
+		}
+      }
 
 }
 
