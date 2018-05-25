@@ -2,6 +2,9 @@
 #include "Quad.h"
 #include <iostream>
 namespace GameEngine{
+  void Quad::setRotation(float r){
+	this->m_rotation = r;
+   }
 
   Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale) : Renderable(), m_position(position), m_color(color), m_scale(scale){
     glGenVertexArrays(1, &VAO);

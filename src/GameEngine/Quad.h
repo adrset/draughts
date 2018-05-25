@@ -17,6 +17,8 @@ namespace GameEngine{
     float getScale() const { return m_scale; }
     glm::vec3 getColor() const { return m_color; }
     void setPosition(glm::vec2 position);
+    float getRotation() const { return this->m_rotation;}
+    void setRotation(float r);
     void setScale(float scale);
     void setColor(glm::vec3);
     void draw(Shader* shader);
@@ -25,6 +27,7 @@ namespace GameEngine{
     unsigned int getVBO() const { return VBO; } // only positions stored
     unsigned int getVAO() const { return VAO; }
   protected:
+    float m_rotation = 0;
     glm::mat4 m_model; //Reusable mat4
     unsigned int VBO, VAO, EBO;
     glm::vec2 m_position;

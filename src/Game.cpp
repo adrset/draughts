@@ -1,3 +1,6 @@
+#include <stdio.h>      /* printf, scanf, puts, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
 #include "Game.h"
 
 #include <vector>
@@ -12,8 +15,9 @@
 
 Game::Game(int width, int height, std::string title, int fps): m_width{width}, m_height(height), m_title(title)
 {	
-	
-
+	for(int i=0;i<4;i++)
+		m_selectedFields[i] = 0;
+	srand(time(NULL));
 	//m_server = new Network::ListenerServer();
 	m_client = new Network::Client();
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
@@ -67,12 +71,12 @@ Game::Game(int width, int height, std::string title, int fps): m_width{width}, m
 
 for(int i =5;i<8;i++){
 		for(int j =0;j<4;j++){
-			m_draughts.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
+			m_draughts.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "white.png"));
 		}
 	}
 
 	
-	m_texturedQuad = new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "red.png");
+	m_texturedQuad = new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "white.png");
    
 	
 
@@ -104,6 +108,11 @@ void Game::loop() {
 	{	
 		processInput();
 		m_timer->start();
+		//Networking
+		if(loop* 10 > m_fps ){
+			networkLogic();
+			loop = 0;	
+		}
 	
  		m_window->clear();
 		glm::vec2 pos = GameEngine::InputManager::getMouseCoords().xy;
@@ -111,9 +120,31 @@ void Game::loop() {
 		const float& scale = m_board->getScale();
 		for (unsigned int i = 0; i< positions.size();i++){
 			if(pos.x > positions[i].x && pos.y > positions[i].y && pos.x < positions[i].x + scale && pos.y < positions[i].y + scale){
-				m_board->setColor(glm::vec3(0.6), i);
-			}else{
-				m_board->setOldColor(i);
+				if(GameEngine::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 0){
+					m_selectedFields[0] = ((int)pos.x /100) + 1;
+					m_selectedFields[1] = ((int)pos.y /100) + 1;
+					m_selected = 1;
+					m_board->setColor(glm::vec3(0.6), i);
+				}else if(GameEngine::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 1){
+					std::cout<<"ala"<<std::endl;
+					int x =  ((int)pos.x /100) + 1;
+					int y = ((int)pos.y /100) + 1;
+					std::cout<< x << " " << y<<std::endl;
+					if(m_selectedFields[0] != x || m_selectedFields[1] != y){
+						m_selectedFields[2] = x;
+						m_selectedFields[3] = y;
+						m_selected = 2;
+						m_board->setColor(glm::vec3(0.6,0.4,0.1), i);
+					}
+				}else if(m_selected == 2){
+					if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_ENTER)){
+						m_selected = 3;
+					}
+				}else if(m_selected == 0){
+					m_board->setOldColor(i);
+
+				}
+					
 			}
 			
 		}
@@ -126,11 +157,7 @@ void Game::loop() {
 		}
 
 
-		//Networking
-		if(loop > m_fps ){
-			networkLogic();
-			loop = 0;	
-		}
+		
 		m_window->swapBuffers();
 
 		glfwPollEvents();
@@ -157,10 +184,13 @@ void Game::networkLogic(){
 		}else{
 			std::cout<<"No connection!       "<<std::endl;
 		}
-	}else if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_R)){
+	}else if(m_selected == 3){
 		std::string strg = "MOV ";
 		strg += std::to_string(m_sessionID);
-		strg += " 1 3 2 4";
+		for(int i=0;i<4;i++){
+			strg += " ";
+			strg += std::to_string(m_selectedFields[i]);
+		}
 
 		char *cstr = new char[strg.length() + 1];
 		strcpy(cstr, strg.c_str());
@@ -171,6 +201,7 @@ void Game::networkLogic(){
 		if(!recv.empty){
 			
 			std::cout<<recv.response<<std::endl;
+			m_selected = 0;
 		}
 	}else{
 
@@ -188,9 +219,16 @@ void Game::networkLogic(){
 			}	
 			
 			std::cout<<"RESPONSE"<<std::endl;
+			int k = 0;
+			int m = 0;
 			for(int i =0;i<8;i++){
 				for(int j =0;j<8;j++){
-					std::cout<< m_boardData[i][j]<<"*";
+					std::cout<<m_boardData[i][j]-2<<"*";
+					if(m_boardData[i][j]-2 < 0) {// white 
+						m_draughts[k++]->setPosition(glm::vec2(m_draughts[i]->getScale() * j,m_draughts[i]->getScale() * i));
+					}else if(m_boardData[i][j]-2 >0){
+						m_draughtsOpposite[m++]->setPosition(glm::vec2(m_draughtsOpposite[i]->getScale() * j,m_draughtsOpposite[i]->getScale() * i));
+					}
 				}
 				std::cout<<std::endl;
 			}

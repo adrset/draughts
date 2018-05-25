@@ -11,8 +11,9 @@ namespace GameEngine{
  void TexturedQuad::draw(Shader* shader){
     shader->use();
     m_model = glm::mat4(1.0); // glm why? :(
-    m_model = glm::translate(m_model, glm::vec3(m_position.x, m_position.y, 0));
 
+    m_model = glm::translate(m_model, glm::vec3(m_position.x, m_position.y, 0));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation), glm::vec3(0.0, 0.0, 1.0));
     m_model = glm::scale(m_model, glm::vec3(m_scale));
     shader->setFloat("useTexture", 1.0f);
     shader->setMat4("model", m_model);
