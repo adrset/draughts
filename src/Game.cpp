@@ -221,6 +221,10 @@ void Game::networkLogic(){
 			std::cout<<"RESPONSE"<<std::endl;
 			int k = 0;
 			int m = 0;
+			for(int i =0;i<12;i++){
+				m_draughts[i]->setPosition(glm::vec2(-100));
+				m_draughtsOpposite[i]->setPosition(glm::vec2(-100));
+			}
 			for(int i =0;i<8;i++){
 				for(int j =0;j<8;j++){
 					std::cout<<m_boardData[i][j]-2<<"*";
@@ -228,6 +232,8 @@ void Game::networkLogic(){
 						m_draughts[k++]->setPosition(glm::vec2(m_draughts[i]->getScale() * j,m_draughts[i]->getScale() * i));
 					}else if(m_boardData[i][j]-2 >0){
 						m_draughtsOpposite[m++]->setPosition(glm::vec2(m_draughtsOpposite[i]->getScale() * j,m_draughtsOpposite[i]->getScale() * i));
+					}else{
+						
 					}
 				}
 				std::cout<<std::endl;
