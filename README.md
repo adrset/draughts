@@ -12,7 +12,7 @@ Required binaries:
 
 # Downloading
 Clone our repository using command:
-	 `git clone --recurse-submodules https://github.com/adrset/warcaby`
+	 `git clone --recurse-submodules https://github.com/adrset/draughts`
 
 # Compilation
 Firstly configure the project using(issue it twice):
