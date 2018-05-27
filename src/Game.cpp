@@ -125,14 +125,16 @@ void Game::loop() {
 					m_selectedFields[1] = ((int)pos.y /100) + 1;
 					m_selected = 1;
 					m_board->setColor(glm::vec3(0.6), i);
+					m_selectedFields[4] = i;
 				}else if(GameEngine::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 1){
-					std::cout<<"ala"<<std::endl;
 					int x =  ((int)pos.x /100) + 1;
 					int y = ((int)pos.y /100) + 1;
 					std::cout<< x << " " << y<<std::endl;
+
 					if(m_selectedFields[0] != x || m_selectedFields[1] != y){
 						m_selectedFields[2] = x;
 						m_selectedFields[3] = y;
+						m_selectedFields[5] = i;
 						m_selected = 2;
 						m_board->setColor(glm::vec3(0.6,0.4,0.1), i);
 					}
@@ -141,7 +143,7 @@ void Game::loop() {
 						m_selected = 3;
 					}
 				}else if(m_selected == 0){
-					m_board->setOldColor(i);
+					//m_board->setOldColor(i);
 
 				}
 					
@@ -200,8 +202,10 @@ void Game::networkLogic(){
 		delete [] cstr;
 		if(!recv.empty){
 			
-			std::cout<<recv.response<<std::endl;
+			//std::cout<<recv.response<<std::endl;
 			m_selected = 0;
+			m_board->setOldColor(m_selectedFields[4]);
+			m_board->setOldColor(m_selectedFields[5]);
 		}
 	}else{
 
@@ -218,7 +222,6 @@ void Game::networkLogic(){
 				i++;
 			}	
 			
-			std::cout<<"RESPONSE"<<std::endl;
 			int k = 0;
 			int m = 0;
 			for(int i =0;i<12;i++){
@@ -227,7 +230,6 @@ void Game::networkLogic(){
 			}
 			for(int i =0;i<8;i++){
 				for(int j =0;j<8;j++){
-					std::cout<<m_boardData[i][j]-2<<"*";
 					if(m_boardData[i][j]-2 < 0) {// white 
 						m_draughts[k++]->setPosition(glm::vec2(m_draughts[i]->getScale() * j,m_draughts[i]->getScale() * i));
 					}else if(m_boardData[i][j]-2 >0){
@@ -236,7 +238,6 @@ void Game::networkLogic(){
 						
 					}
 				}
-				std::cout<<std::endl;
 			}
 			
 		}else{

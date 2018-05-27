@@ -36,7 +36,7 @@ private:
 	GameEngine::TexturedQuad* m_texturedQuad;
 	GameEngine::QuadField* m_board;
 	int m_fps = 60;
-	int m_selectedFields[4];
+	int m_selectedFields[6];
 	unsigned int m_sessionID = 0;
 	void processInput();
 	int m_width;
