@@ -13,7 +13,7 @@
 
 
 
-Game::Game(int width, int height, std::string title, int fps): m_width{width}, m_height(height), m_title(title)
+Game::Game(int width, int height, std::string title, int fps, std::string room): m_width{width}, m_height(height), m_title(title), m_room(room)
 {	
 	for(int i=0;i<4;i++)
 		m_selectedFields[i] = 0;
@@ -97,7 +97,50 @@ std::ostream& operator<<(std::ostream& stream, glm::vec3& vec){
 }
 
 void Game::start(){
+	Network::data recv;
+	
+	std::stringstream str;
+	while(recv.empty){
+		recv = m_client->send("GET_SID", 30000);
+		
+	}
+	str<<recv.response;
+	str>>m_sessionID;
+	std::cout<<"Assigned ID"<<m_sessionID<<std::endl;
+
+	std::string send = "CREATE_ROOM ";
+	send += m_room;
+	char* s = new char[send.length()];
+	strcpy(s,send.c_str());
+	recv.empty = true;
+	while(recv.empty){
+		recv = m_client->send(s, 30000);
+	}
+	delete s;
+	if(strncmp(recv.response, "NOK",3) == 0){ // room exists!
+		std::cout<<"Room with given name exists!"<<std::endl<<"Trying to join it..."<<std::endl;
+	}
+
+	send = "JOIN ";
+	send += m_room;
+	send += " ";
+	send += std::to_string(m_sessionID);
+	s = new char[send.length()];
+	strcpy(s,send.c_str());
+	recv.empty = true;
+	while(recv.empty){
+		recv = m_client->send(s, 30000);
+	}
+	delete s;
+	if(strncmp(recv.response, "NOK",3) == 0){ // room exists!
+		std::cout<<"Room is full! Connect to different one!"<<std::endl;
+		
+	}else{
+		std::cout<<"Connected!"<<recv.response<<std::endl;
+	
 	loop();
+	}
+	
 }
 
 void Game::loop() {
@@ -175,24 +218,14 @@ void Game::loop() {
 void Game::networkLogic(){
 
 	Network::data recv;
-	if(m_sessionID == 0 ){
-		recv = m_client->send("GET_SID", 30000);
-		if(!recv.empty){
-			std::stringstream str;
-			str<<recv.response;
-			str>>m_sessionID;
-			std::cout<<"Assigned ID"<<m_sessionID<<std::endl;
-		
-		}else{
-			std::cout<<"No connection!       "<<std::endl;
-		}
-	}else if(m_selected == 3){
+	if(m_selected == 3){
 		std::string strg = "MOV ";
 		strg += std::to_string(m_sessionID);
 		for(int i=0;i<4;i++){
 			strg += " ";
 			strg += std::to_string(m_selectedFields[i]);
 		}
+		strg += m_room;
 
 		char *cstr = new char[strg.length() + 1];
 		strcpy(cstr, strg.c_str());
@@ -208,14 +241,21 @@ void Game::networkLogic(){
 			m_board->setOldColor(m_selectedFields[5]);
 		}
 	}else{
-
-	recv = m_client->send("GET_BOARD");
+	std::string s = "GET_BOARD ";
+	s+= m_room;
+	char *scp = new char[s.length()];
+	strcpy(scp, s.c_str());
+	recv = m_client->send(scp);
 		if(!recv.empty){
 			
 			std::stringstream str;
 			str<<recv.response;
 			int x;
-			
+			if(strncmp(recv.response, "No rooms!", 3) == 0){ // 3 is enough :)
+				std::cout<<"Server probalby died! No rooms!"<<std::endl<<"Press enter to exit."<<std::endl;
+				getchar();
+				glfwSetWindowShouldClose(m_window->getWindowID(), true);
+			}else{
 			int i=0;
 			while(str>>x){
 				m_boardData[i/8][i%8] = x ;
@@ -239,7 +279,7 @@ void Game::networkLogic(){
 					}
 				}
 			}
-			
+			}
 		}else{
 			std::cout<<"No connection!       "<<std::endl;
 		}

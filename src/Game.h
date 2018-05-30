@@ -14,41 +14,41 @@
 #include <Network/Client.h>
 class Game
 {
-public:
-	Game(int width, int height, std::string title, int fps = 60);
-	~Game();
-	void cleanUp();
-	void start();
-	void gameLogic();
-	void waitAndShoutFPS();
+    public:
+        Game(int width, int height, std::string title, int fps = 60, std::string room = "alfa");
+        ~Game();
+        void cleanUp();
+        void start();
+        void gameLogic();
+        void waitAndShoutFPS();
 
-private:
-	void networkLogic();
-	int m_selected = 0;
-	int m_boardData[8][8];
-	//Network::ListenerServer* m_server;
-	Network::Client* m_client;
-	glm::mat4 m_projection;
-	GameEngine::Shader* m_instanceShader;
-	GameEngine::Shader* m_shader;
-	std::vector<GameEngine::TexturedQuad*> m_draughtsOpposite;
-	std::vector<GameEngine::TexturedQuad*> m_draughts;
-	GameEngine::TexturedQuad* m_texturedQuad;
-	GameEngine::QuadField* m_board;
-	int m_fps = 60;
-	int m_selectedFields[6];
-	unsigned int m_sessionID = 0;
-	void processInput();
-	int m_width;
-	int m_height;
+    private:
+        void networkLogic();
+        int m_selected = 0;
+        int m_boardData[8][8];
+        //Network::ListenerServer* m_server;
+        Network::Client* m_client;
+        glm::mat4 m_projection;
+        GameEngine::Shader* m_instanceShader;
+        GameEngine::Shader* m_shader;
+        std::vector<GameEngine::TexturedQuad*> m_draughtsOpposite;
+        std::vector<GameEngine::TexturedQuad*> m_draughts;
+        GameEngine::TexturedQuad* m_texturedQuad;
+        GameEngine::QuadField* m_board;
+        int m_fps = 60;
+        int m_selectedFields[6];
+        unsigned int m_sessionID = 0;
+        void processInput();
+        int m_width;
+        int m_height;
+        std::string m_room;
+        std::string m_title;
 
-	std::string m_title;
- 
-	GameEngine::Window* m_window;
+        GameEngine::Window* m_window;
 
-	GameEngine::Timer* m_timer;
-	float lastX;
-	float lastY;
-	void loop();
+        GameEngine::Timer* m_timer;
+        float lastX;
+        float lastY;
+        void loop();
 };
 
