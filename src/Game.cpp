@@ -137,7 +137,7 @@ void Game::start(){
 		
 	}else{
 		std::cout<<"Connected!"<<recv.response<<std::endl;
-	
+	m_window->showWindow();
 	loop();
 	}
 	
