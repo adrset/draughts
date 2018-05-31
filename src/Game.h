@@ -3,15 +3,15 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <GameEngine/Window.h>
-#include <GameEngine/Shader.h>
-#include <GameEngine/Timer.h>
-#include <GameEngine/QuadField.h>
-#include <GameEngine/TexturedQuad.h>
-#include <GameEngine/Button.h>
-#include <GameEngine/Graph.h>
+#include <ge/Window.h>
+#include <ge/Shader.h>
+#include <ge/Timer.h>
+#include <ge/QuadField.h>
+#include <ge/TexturedQuad.h>
+#include <ge/Button.h>
+#include <ge/Graph.h>
 //#include <Network/ListenerServer.h>
-#include <Network/Client.h>
+#include <network/Client.h>
 class Game
 {
     public:
@@ -27,14 +27,14 @@ class Game
         int m_selected = 0;
         int m_boardData[8][8];
         //Network::ListenerServer* m_server;
-        Network::Client* m_client;
+        network::Client* m_client;
         glm::mat4 m_projection;
-        GameEngine::Shader* m_instanceShader;
-        GameEngine::Shader* m_shader;
-        std::vector<GameEngine::TexturedQuad*> m_draughtsOpposite;
-        std::vector<GameEngine::TexturedQuad*> m_draughts;
-        GameEngine::TexturedQuad* m_texturedQuad;
-        GameEngine::QuadField* m_board;
+        ge::Shader* m_instanceShader;
+        ge::Shader* m_shader;
+        std::vector<ge::TexturedQuad*> m_draughtsOpposite;
+        std::vector<ge::TexturedQuad*> m_draughts;
+        ge::TexturedQuad* m_texturedQuad;
+        ge::QuadField* m_board;
         int m_fps = 60;
         int m_selectedFields[6];
         unsigned int m_sessionID = 0;
@@ -44,9 +44,9 @@ class Game
         std::string m_room;
         std::string m_title;
 
-        GameEngine::Window* m_window;
+        ge::Window* m_window;
 
-        GameEngine::Timer* m_timer;
+        ge::Timer* m_timer;
         float lastX;
         float lastY;
         void loop();

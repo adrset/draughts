@@ -19,16 +19,16 @@ Game::Game(int width, int height, std::string title, int fps, std::string room):
 		m_selectedFields[i] = 0;
 	srand(time(NULL));
 	//m_server = new Network::ListenerServer();
-	m_client = new Network::Client();
-	m_window = new GameEngine::Window(m_width, m_height, m_title);
+	m_client = new network::Client();
+	m_window = new ge::Window(m_width, m_height, m_title);
 	
-	m_timer = new GameEngine::Timer(fps);
+	m_timer = new ge::Timer(fps);
 
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 
-	m_instanceShader = new GameEngine::Shader("instance.vs", "instance.fs");
-	m_shader = new GameEngine::Shader("2dshader.vs", "2dshader.fs");
+	m_instanceShader = new ge::Shader("instance.vs", "instance.fs");
+	m_shader = new ge::Shader("2dshader.vs", "2dshader.fs");
 	m_projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.0f);
 
 	m_shader->use();
@@ -62,21 +62,21 @@ Game::Game(int width, int height, std::string title, int fps, std::string room):
 		}
 	}
 
-	m_board = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
+	m_board = new ge::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
 	for(int i =0;i<3;i++){
 		for(int j =0;j<4;j++){
-			m_draughtsOpposite.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 1 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
+			m_draughtsOpposite.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 1 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
 		}
 	}
 
 for(int i =5;i<8;i++){
 		for(int j =0;j<4;j++){
-			m_draughts.push_back(new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "white.png"));
+			m_draughts.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "white.png"));
 		}
 	}
 
 	
-	m_texturedQuad = new GameEngine::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "white.png");
+	m_texturedQuad = new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "white.png");
    
 	
 
@@ -97,7 +97,7 @@ std::ostream& operator<<(std::ostream& stream, glm::vec3& vec){
 }
 
 void Game::start(){
-	Network::data recv;
+	network::Data recv;
 	
 	std::stringstream str;
 	while(recv.empty){
@@ -158,18 +158,18 @@ void Game::loop() {
 		}
 	
  		m_window->clear();
-		glm::vec2 pos = GameEngine::InputManager::getMouseCoords().xy;
+		glm::vec2 pos = ge::InputManager::getMouseCoords().xy;
 		const std::vector <glm::vec3>& positions = m_board->getPositions();
 		const float& scale = m_board->getScale();
 		for (unsigned int i = 0; i< positions.size();i++){
 			if(pos.x > positions[i].x && pos.y > positions[i].y && pos.x < positions[i].x + scale && pos.y < positions[i].y + scale){
-				if(GameEngine::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 0){
+				if(ge::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 0){
 					m_selectedFields[0] = ((int)pos.x /100) + 1;
 					m_selectedFields[1] = ((int)pos.y /100) + 1;
 					m_selected = 1;
 					m_board->setColor(glm::vec3(0.6), i);
 					m_selectedFields[4] = i;
-				}else if(GameEngine::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 1){
+				}else if(ge::InputManager::isMouseKeyDown(GLFW_MOUSE_BUTTON_1) && m_selected == 1){
 					int x =  ((int)pos.x /100) + 1;
 					int y = ((int)pos.y /100) + 1;
 					std::cout<< x << " " << y<<std::endl;
@@ -182,7 +182,7 @@ void Game::loop() {
 						m_board->setColor(glm::vec3(0.6,0.4,0.1), i);
 					}
 				}else if(m_selected == 2){
-					if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_ENTER)){
+					if(ge::InputManager::isKeyPressed(GLFW_KEY_ENTER)){
 						m_selected = 3;
 					}
 				}else if(m_selected == 0){
@@ -217,7 +217,7 @@ void Game::loop() {
 
 void Game::networkLogic(){
 
-	Network::data recv;
+	network::Data recv;
 	if(m_selected == 3){
 		std::string strg = "MOV ";
 		strg += std::to_string(m_sessionID);
@@ -301,7 +301,7 @@ void Game::gameLogic(){
 
 void Game::processInput()
 {
-	if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
+	if(ge::InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(m_window->getWindowID(), true);
 
 }
