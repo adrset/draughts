@@ -16,6 +16,7 @@ add_subdirectory (src/network)
 add_subdirectory (src/lib/glfw)
 add_subdirectory (src/lib/glad)
 add_subdirectory (src/lib/stb)
+
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "" FORCE)

@@ -37,6 +37,7 @@ class Window {
         static bool initialized;
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     public:
+		void setTitle(std::string title);
         static GLFWwindow* currWindow;
         void showWindow();
         void hideWindow();

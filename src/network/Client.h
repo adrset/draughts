@@ -18,7 +18,7 @@ namespace network{
 	class Client{
 	public:
 		Client();
-		Data send(char* message, unsigned int usec=100);
+		Data send(const char* message, unsigned int usec=100);
 		void close();
 	private:
 		int m_activity;

@@ -29,7 +29,7 @@ Client::Client(){
 
 }
 
-Data Client::send(char* message, unsigned int usec)
+Data Client::send(const char* message, unsigned int usec)
 {
    
     struct timeval read_timeout;

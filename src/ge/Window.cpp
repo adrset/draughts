@@ -14,6 +14,9 @@ void Window::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 }
+void Window::setTitle(std::string title){
+	glfwSetWindowTitle(m_window, title.c_str());
+}
 
 void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
