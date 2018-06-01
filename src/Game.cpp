@@ -65,19 +65,15 @@ Game::Game(int width, int height, std::string title, int fps, std::string room):
     m_board = new ge::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, offset);
     for(int i =0; i<3; i++) {
         for(int j =0; j<4; j++) {
-            m_draughtsOpposite.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 1 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
+            m_draughtsOpposite.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 1 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "white.png"));
         }
     }
 
     for(int i =5; i<8; i++) {
         for(int j =0; j<4; j++) {
-            m_draughts.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "white.png"));
+            m_draughts.push_back(new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(200*j + (i == 5 || i == 7 ? 100: 0),100*i), glm::vec3(0.13, 0.7, 0.12), offset, "red.png"));
         }
     }
-
-
-    m_texturedQuad = new ge::TexturedQuad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100,0), glm::vec3(0.3, 0.7, 0.1), offset, "white.png");
-
 
 
 
