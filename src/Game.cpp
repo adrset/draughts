@@ -235,6 +235,8 @@ void Game::networkLogic() {
     } else {
         std::string s = "GET_BOARD ";
         s+= m_room;
+        s+= " ";
+        s+= std::to_string(m_sessionID);
         recv = m_client->send(s.c_str());
         if(!recv.empty) {
 

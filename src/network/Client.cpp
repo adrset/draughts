@@ -39,7 +39,7 @@ Data Client::send(const char* message, unsigned int usec)
     read_timeout.tv_usec = usec;
 
     strcpy(buffer, message);
-    //printf( "|Message for server|: %s \n", buffer );
+
     FD_SET(m_socket, &read_fds);
     socklen_t len = sizeof( m_server );
     int c = 0;
