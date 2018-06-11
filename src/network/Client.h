@@ -1,6 +1,7 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h> // exit()
 #include <string.h> // memset()
@@ -8,8 +9,6 @@
 #include <sys/socket.h>
 #include "Data.h"
 
-#define SERWER_PORT 8888
-#define SERWER_IP "127.0.0.1"
 
 
 
@@ -17,7 +16,7 @@ namespace network{
 
 	class Client{
 	public:
-		Client();
+		Client(const char*, int port);
 		Data send(const char* message, unsigned int usec=100);
 		void close();
 	private:

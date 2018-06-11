@@ -13,13 +13,13 @@
 
 
 
-Game::Game(int width, int height, std::string title, int fps, std::string room): m_width{width}, m_height(height), m_title(title), m_room(room)
+Game::Game(int width, int height, std::string title,std::string ip, int port, std::string room, int fps): m_width{width}, m_height(height), m_title(title), m_room(room)
 {
     for(int i=0; i<4; i++)
         m_selectedFields[i] = 0;
     srand(time(NULL));
     //m_server = new Network::ListenerServer();
-    m_client = new network::Client();
+    m_client = new network::Client(ip.c_str(), port);
     m_window = new ge::Window(m_width, m_height, m_title);
 
     m_timer = new ge::Timer(fps);

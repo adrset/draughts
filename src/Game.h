@@ -15,7 +15,7 @@
 class Game
 {
     public:
-        Game(int width, int height, std::string title, int fps = 60, std::string room = "alfa");
+        Game(int width, int height, std::string title,std::string ip, int port, std::string room = "alfa", int fps = 60);
         ~Game();
         void cleanUp();
         void start();

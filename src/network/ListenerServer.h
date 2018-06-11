@@ -2,7 +2,7 @@
 #define LISTENER_SERVER_H_
 
 #define SERWER_PORT 8888
-#define SERWER_IP "192.168.1.88"
+#define SERWER_IP ""
 #include <stdio.h>
 #include <stdlib.h> // exit()
 #include <string.h> // memset()

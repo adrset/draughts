@@ -1,19 +1,21 @@
 #include "Client.h"
 namespace network{
 
-Client::Client(){
+Client::Client(const char* ip, int port){
 
     char message[20] = "";
     FD_ZERO(&master);
     FD_ZERO(&read_fds);
+    
+    std::cout<<"Connecting "<< ip <<":"<<port<<std::endl;
 
     m_server =
     {
         .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
+        .sin_port = htons( port )
     };
 
-    if( inet_pton( AF_INET, SERWER_IP, & m_server.sin_addr ) <= 0 )
+    if( inet_pton( AF_INET, ip, & m_server.sin_addr ) <= 0 )
     {
         perror( "inet_pton() ERROR" );
         exit( 1 );
