@@ -96,8 +96,14 @@ void Game::start() {
     network::Data recv;
 
     std::stringstream str;
+    std::string tmp;
+    srand(time(nullptr));
+
+    int a = rand()%10000;
+    std::string toSend = "GET_SID";
+    toSend += std::to_string(a);
     while(recv.empty) {
-        recv = m_client->send("GET_SID", 30000);
+        recv = m_client->send((char *)toSend.c_str(), 30000);
 
     }
     str<<recv.response;
@@ -132,8 +138,17 @@ void Game::start() {
         std::cout<<"Room is full! Connect to different one!"<<std::endl;
 
     } else {
-        std::cout<<"Connected!"<<recv.response<<std::endl;
-        m_window->setTitle("Draughts - room: " + m_room);
+		m_color = std::atoi(&recv.response[3]);
+        std::cout<<"Connected!"<<recv.response<<","<<tmp<<std::endl;
+        if(m_color == 1){
+			std::cout<<"Color purple"<<std::endl;
+			tmp = "purple";
+		}
+		else if(m_color == 2){
+			std::cout<<"Color red"<<std::endl;
+			tmp = "red";
+		}
+        m_window->setTitle("Draughts - room: " + m_room + " color:" + tmp);
         m_window->showWindow();
         loop();
     }
@@ -180,8 +195,13 @@ void Game::loop() {
                 } else if(m_selected == 2) {
                     if(ge::InputManager::isKeyPressed(GLFW_KEY_ENTER)) {
                         m_selected = 3;
+                    } else if(ge::InputManager::isKeyPressed(GLFW_KEY_B)) {
+                        m_selected = 0;
+                        m_selected = 0;
+                        m_board->setOldColor(m_selectedFields[4]);
+                        m_board->setOldColor(m_selectedFields[5]);
                     }
-                } 
+                }
 
             }
 
@@ -248,11 +268,11 @@ void Game::networkLogic() {
                 getchar();
                 glfwSetWindowShouldClose(m_window->getWindowID(), true);
             } else if(strncmp(recv.response, "END", 3) == 0) {
-				std::cout<<"Match finished!"<<std::endl;
+                std::cout<<"Match finished!"<<std::endl;
                 getchar();
                 glfwSetWindowShouldClose(m_window->getWindowID(), true);
-            
-            }else{
+
+            } else {
                 int i=0;
                 while(str>>x) {
                     m_boardData[i/8][i%8] = x ;

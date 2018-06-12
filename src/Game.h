@@ -43,7 +43,7 @@ class Game
         int m_height;
         std::string m_room;
         std::string m_title;
-
+		int m_color;
         ge::Window* m_window;
 
         ge::Timer* m_timer;
