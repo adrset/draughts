@@ -244,6 +244,8 @@ void Game::networkLogic() {
             strg += std::to_string(m_selectedFields[i]);
         }
         strg += m_room;
+        strg += " ";
+        strg += m_pass;
 
         recv = m_client->send(strg.c_str());
 
