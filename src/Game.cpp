@@ -98,10 +98,12 @@ void Game::start() {
     std::stringstream str;
     std::string tmp;
     srand(time(nullptr));
-
+	m_pass = ge::RandomString::getString();
     int a = rand()%10000;
-    std::string toSend = "GET_SID";
+    std::string toSend = "GET_SID ";
     toSend += std::to_string(a);
+    toSend += " ";
+    toSend += m_pass;
     while(recv.empty) {
         recv = m_client->send((char *)toSend.c_str(), 30000);
 
@@ -142,13 +144,13 @@ void Game::start() {
         std::cout<<"Connected!"<<recv.response<<","<<tmp<<std::endl;
         if(m_color == 1){
 			std::cout<<"Color purple"<<std::endl;
-			tmp = "purple";
+			m_colorString = "purple";
 		}
 		else if(m_color == 2){
 			std::cout<<"Color red"<<std::endl;
-			tmp = "red";
+			m_colorString = "red";
 		}
-        m_window->setTitle("Draughts - room: " + m_room + " color:" + tmp);
+        m_window->setTitle("Draughts - room: " + m_room + " color:" + m_colorString);
         m_window->showWindow();
         loop();
     }
@@ -275,7 +277,8 @@ void Game::networkLogic() {
             } else {
                 int i=0;
                 while(str>>x) {
-                    m_boardData[i/8][i%8] = x ;
+					if(i == 64) m_currentPlayer = x;
+					else m_boardData[i/8][i%8] = x ;
                     i++;
                 }
 
@@ -285,6 +288,12 @@ void Game::networkLogic() {
                     m_draughts[i]->setPosition(glm::vec2(-100));
                     m_draughtsOpposite[i]->setPosition(glm::vec2(-100));
                 }
+                if(m_currentPlayer == m_color)
+					 m_window->setTitle("Draughts - room: " + m_room + " color:" + m_colorString + " Your move! ");
+				else
+					 m_window->setTitle("Draughts - room: " + m_room + " color:" + m_colorString + " Opponent's move! ");
+
+               
                 for(int i =0; i<8; i++) {
                     for(int j =0; j<8; j++) {
                         if(m_boardData[i][j]-2 < 0) {// white

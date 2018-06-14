@@ -6,6 +6,7 @@
 #include <ge/Window.h>
 #include <ge/Shader.h>
 #include <ge/Timer.h>
+#include <ge/RandomString.h>
 #include <ge/QuadField.h>
 #include <ge/TexturedQuad.h>
 #include <ge/Button.h>
@@ -23,6 +24,9 @@ class Game
         void waitAndShoutFPS();
 
     private:
+		std::string m_colorString;
+		int m_currentPlayer;
+		std::string m_pass;
         void networkLogic();
         int m_selected = 0;
         int m_boardData[8][8];
