@@ -8,3 +8,6 @@
         path = src/ge
         url = https://github.com/adrset/beef2d
 
+[submodule "src/lib/beef2d"]
+	path = src/lib/beef2d
+	url = https://github.com/adrset/beef2d
